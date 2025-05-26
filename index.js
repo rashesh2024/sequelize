@@ -65,8 +65,8 @@ const Users = sequelize.define(
 //Users.drop(); //? Dropt the table if its created
 
 try {
-  await Users.sync({ alter: true });
-  // await Users.sync({ force: true });
+  // await Users.sync({ alter: true });
+  await Users.sync({ force: true });
   // await Users.sync();
   console.log("Sync Success");
 } catch (err) {
@@ -94,6 +94,20 @@ const sam = await Users.create({
   age: 24,
   dob: "2001-08-08",
 });
+
+try {
+  const multiple_user = await Users.bulkCreate([
+    { username: "Shiva", password: "132" },
+    { username: "Rudra", password: "132" },
+    { username: "Hanuman", password: "132" },
+    { username: "Ram", password: "132" },
+    { username: "Krishna", password: "132" },
+    { username: "Arjuna", password: "132" },
+  ]);
+  console.log("Alluser created!!");
+} catch (error) {
+  console.log("Not Created", error);
+}
 
 sparky.decrement("age", { by: 5 });
 await sparky.reload();
