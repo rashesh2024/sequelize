@@ -57,24 +57,26 @@ await sequelize.sync({ force: true }).then(() => {
 
 try {
   const multiple_user = await Users.bulkCreate([
-    { username: "Shiva", password: "132" },
-    { username: "Rudra", password: "132" },
-    { username: "Hanuman", password: "132" },
-    { username: "Ram", password: "132" },
-    { username: "Krishna", password: "132" },
-    { username: "Arjuna", password: "132" },
+    { username: "Shiva", password: "132", age: 32 },
+    { username: "Rudra", password: "132", age: 24 },
+    { username: "Hanuman", password: "132", age: 55 },
+    { username: "Ram", password: "132", age: 84 },
+    { username: "Krishna", password: "132", age: 26 },
+    { username: "Arjuna", password: "132", age: 30 },
   ]);
   console.log("Alluser created!!");
 } catch (error) {
   console.log("Not Created", error);
 }
 
+//! Basic Selection
 // const allUser = await Users.findAll(); //? Select * from users;
 // const allUser = await Users.findAll({ attributes: ["username", "password"] }); //? Select username , password from users;
 // const allUser = await Users.findAll({
 //   attributes: ["username", ["password", "pwd"]],
 // }); //? Select username , password as pwd from users;
 
+//! Aggrigation
 /*
 const userCount = await Users.findAll({
   attributes: [[sequelize.fn("COUNT", sequelize.col("username")), "users"]],
@@ -83,10 +85,34 @@ const userCount = await Users.findAll({
 console.log(userCount[0].get("users")); 
 */
 
-// const allUser = await Users.findAll({ where: { username: "Shiva" } }); //? Select * from users ;
+//! Where Clause
+/*
+const allUser = await Users.findAll({ where: { username: "Shiva" } }); //? Select * from users where name = Shiva;
+const allUser = await Users.findAll({ where: { username: "Shiva", age: 21 } }); //? Select * from users where name = Shiva;
 const allUser = await Users.findAll({
   where: { username: { [Op.eq]: "Rudra" } },
 }); //? Select * from users ;
+*/
+
+//! Limit and Offset
+// const allUser = await Users.findAll({ limit: 3, offset: 2 });
+
+//! Order By
+/*
+const allUser = await Users.findAll({
+  attributes: ["username", "age"],
+  order: [["age", "DESC"]], // ASC , DESC
+});*/
+
+//! Group By
+
+const allUser = await Users.findAll({
+  attributes: [
+    "username",
+    [sequelize.fn("SUM", sequelize.col("age")), "ageSum"],
+  ],
+  group: "username",
+});
 
 allUser.forEach((user) => {
   console.log(user.toJSON());
