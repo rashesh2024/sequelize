@@ -105,13 +105,30 @@ const allUser = await Users.findAll({
 });*/
 
 //! Group By
-
+/*
 const allUser = await Users.findAll({
   attributes: [
     "username",
     [sequelize.fn("SUM", sequelize.col("age")), "ageSum"],
   ],
   group: "username",
+});
+*/
+
+//! Operators
+const allUser = await Users.findAll({
+  where: {
+    // [Op.or]: [{ username: "Krishna" }, { age: 30 }],
+    [Op.and]: [{ username: "Krishna" }, { age: 26 }],
+    // age: {
+    //   // [Op.or]: [{ username: "Krishna" }, { age: 26 }],
+    //   // [Op.gt]: 25,
+    //   // [Op.lt]: 25,
+    //   // [Op.gte]: 30,
+    //   // [Op.lte]: 30,
+    //   // [Op.ne]: 26,
+    // },
+  },
 });
 
 allUser.forEach((user) => {
